@@ -1,4 +1,4 @@
-
+#! /cvmfs/soft.computecanada.ca/nix/var/nix/profiles/16.09/bin/bash
 NPROC=32
 MEM=100GB
 while [ $1 ] ; do  
@@ -26,8 +26,9 @@ for i in $METHOD ; do
    fi
    nbas=1
    for j in $BASIS ; do
-      mkdir $nbas
-      cd $nbas
+      REPBASIS=$(echo $BASIS | sed 's/+/plus/g' | sed 's/*/star/g' | sed 's/(/_/g' | sed 's/)/_/g')
+      mkdir $REPBASIS
+      cd $REPBASIS
       echo "$i / $j"
       if [ $(tail -n 1 opt.log | grep -c "Normal termination") == "0"  ]; then
         input="opt.gjf"

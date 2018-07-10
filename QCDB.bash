@@ -1,5 +1,5 @@
 #! /bin/bash
-#SBATCH -t 7-00:00
+#SBATCH -t 0-08:00
 #SBATCH -c 32
 #SBATCH --mem=0
 #SBATCH --account=def-fdion
@@ -37,12 +37,12 @@ while [ $(head -n 1 /home/dion/QCDB/lists.txt) != "" ] ; do
 	n=$(head -n 1 /home/dion/QCDB/lists.txt)
 	mkdir $n
 	cd $n
-	python /home/dion/QCDB/python/get_XYZ.py 1 > XYZ.txt
+	python /home/dion/QCDB/bin/get_XYZ 1 > XYZ.txt
 
         if [ $? == 0 ] ; then
                 mkdir GAUSSIAN
                 cd GAUSSIAN
-                bash ../../launch_gaussian.bash
+                bash /home/dion/QCDB/bin/launch_gaussian
                 cd ..
         fi
 	cd ..
@@ -55,11 +55,11 @@ while [ "$n" -lt "$MAX" ] ; do
 	looklist
 	mkdir $n
 	cd $n 
-	python /home/dion/QCDB/python/get_XYZ.py $n > XYZ.txt
+	python /home/dion/QCDB/bin/get_XYZ $n > XYZ.txt
 	if [ $? == 0 ] ; then
 		mkdir GAUSSIAN
 		cd GAUSSIAN
-		bash ../../launch_gaussian.bash
+		bash /home/dion/QCDB/bin/launch_gaussian
 		cd ..
 	fi
 	cd ..

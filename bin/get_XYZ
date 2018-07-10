@@ -9,7 +9,7 @@ import sys
 
 n=sys.argv[1]
 
-compound = pcp.Substance.from_sid(n)
+compound = pcp.Compound.from_cid(n)
 XYZ = cirpy.resolve(compound.synonyms[0], 'xyz')
 if XYZ is None:
     sys.exit(1)
