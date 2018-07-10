@@ -1,0 +1,78 @@
+
+NPROC=32
+MEM=100GB
+while [ $1 ] ; do  
+  if [ $1 == "-nproc" ] ; then
+	NPROC=$2
+	shift
+	shift
+  elif [ $1 == "-mem" ] ; then
+	  MEM=$2
+	shift 
+	shift
+  fi
+done
+
+METHOD="HF MP2 MP3 B3LYP WB97XD"
+BASIS="STO-3G 3-21G 6-31G 6-311++G(3df,3pd) aug-cc-pvdz aug-cc-pvtz aug-cc-pvqz"
+
+for i in $METHOD ; do
+   mkdir $i
+   cd $i
+   if [ $i == "MP3" ] ; then
+           FREQ="freq=(Numer,nraman)"
+   else
+           FREQ="freq=(raman)"
+   fi
+   nbas=1
+   for j in $BASIS ; do
+      mkdir $nbas
+      cd $nbas
+      echo "$i / $j"
+      if [ $(tail -n 1 opt.log | grep -c "Normal termination") == "0"  ]; then
+        input="opt.gjf"
+        echo "%nprocshared=$NPROC" > $input
+        echo "%mem=$MEM" >> $input
+        echo "%chk=chk.chk" >> $input
+        if [ -e ../../chk.chk ] ; then
+	  echo "%oldchk=../../chk.chk" >> $input
+          echo "#$i/$j opt=(VeryTight) geom=checkpoint" >> $input
+          echo "" >> $input
+          echo "$i $j" >> $input
+          echo "" >> $input
+          echo "0 1" >> $input
+          echo "" >> $input
+        else
+          echo "#$i/$j opt=(VeryTight)" >> $input
+          echo "" >> $input
+          echo "$i $j" >> $input
+          echo "" >> $input
+          echo "0 1" >> $input
+          cat ../../../XYZ.txt >> $input
+          echo "" >> $input
+        fi
+      echo "g16 $(pwd)/$input" > /home/dion/QCDB/current.txt
+      time g16 $input 
+      fi
+      if [ $(tail -n 1 opt.log | grep -c "Normal termination") -gt 0  ] && [  $(tail -n 1  "freq.log"  | grep -c "Normal termination") -gt "0" ] ; then
+          cp chk.chk ../../chk.chk
+          formchk chk.chk
+	  input="freq.gjf"
+	  echo "%nprocshared=$NPROC" > $input
+	  echo "%mem=$MEM" >> $input
+	  echo "%chk=chk.chk" >> $input
+          echo "#$i/$j geom=checkpoint $FREQ" >> $input
+          echo "" >> $input
+          echo "$i $j" >> $input
+          echo "" >> $input
+          echo "0 1" >> $input
+          echo "" >> $input
+	  echo "g16 $(pwd)/$input" > /home/dion/QCDB/current.txt
+	  time g16 $input
+      fi
+      let nbas=$nbas+1
+      cd ..
+   done
+   cd ..
+done
+
