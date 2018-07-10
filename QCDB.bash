@@ -35,12 +35,12 @@ MAX=1000000
 function looklist {
 while [ $(head -n 1 /home/dion/QCDB/lists.txt) != "" ] ; do
 	n=$(head -n 1 /home/dion/QCDB/lists.txt)
-	mkdir $n
+	mkdir -p $n
 	cd $n
 	python /home/dion/QCDB/bin/get_XYZ 1 > XYZ.txt
 
         if [ $? == 0 ] ; then
-                mkdir GAUSSIAN
+                mkdir -p GAUSSIAN
                 cd GAUSSIAN
                 bash /home/dion/QCDB/bin/launch_gaussian
                 cd ..
@@ -53,11 +53,11 @@ mv /home/dion/QCDB/lists.txt.tmp /home/dion/QCDB/lists.txt
 
 while [ "$n" -lt "$MAX" ] ; do
 	looklist
-	mkdir $n
+	mkdir -p $n
 	cd $n 
 	python /home/dion/QCDB/bin/get_XYZ $n > XYZ.txt
 	if [ $? == 0 ] ; then
-		mkdir GAUSSIAN
+		mkdir -p GAUSSIAN
 		cd GAUSSIAN
 		bash /home/dion/QCDB/bin/launch_gaussian
 		cd ..

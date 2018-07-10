@@ -17,7 +17,7 @@ METHOD="HF MP2 MP3 B3LYP WB97XD"
 BASIS="STO-3G 3-21G 6-31G 6-311++G(3df,3pd) aug-cc-pvdz aug-cc-pvtz aug-cc-pvqz"
 
 for i in $METHOD ; do
-   mkdir $i
+   mkdir -p $i
    cd $i
    if [ $i == "MP3" ] ; then
            FREQ="freq=(Numer,nraman)"
@@ -26,11 +26,12 @@ for i in $METHOD ; do
    fi
    nbas=1
    for j in $BASIS ; do
-      REPBASIS=$(echo $BASIS | sed 's/+/plus/g' | sed 's/*/star/g' | sed 's/(/_/g' | sed 's/)/_/g')
-      mkdir $REPBASIS
+      REPBASIS=$(echo $j | sed 's/+/plus/g' | sed 's/*/star/g' | sed 's/(/_/g' | sed 's/)/_/g' | sed 's/,/virg/g')
+      mkdir -p $REPBASIS
       cd $REPBASIS
-      echo "$i / $j"
-      if [ $(tail -n 1 opt.log | grep -c "Normal termination") == "0"  ]; then
+      echo "$i / $j : $(pwd)"
+      test="$(tail -n 1 opt.log | grep -c 'Normal termination')"
+      if [ "${test}" == "0"  ]; then
         input="opt.gjf"
         echo "%nprocshared=$NPROC" > $input
         echo "%mem=$MEM" >> $input
@@ -52,10 +53,29 @@ for i in $METHOD ; do
           cat ../../../XYZ.txt >> $input
           echo "" >> $input
         fi
-      echo "g16 $(pwd)/$input" > /home/dion/QCDB/current.txt
-      time g16 $input 
+	if [ "$j" == "6-311++G(3df,3pd)" ] || [ "$j" == "aug-cc-pvtz" ] || [ "$j" == "aug-cc-pvqz" ] ; then
+	  echo "cd $(pwd)" >> /home/dion/QCDB/waitlist.txt
+	  echo "g16 $input" >> /home/dion/QCDB/waitlist.txt
+          input="freq.gjf"
+          echo "%nprocshared=$NPROC" > $input
+          echo "%mem=$MEM" >> $input
+          echo "%chk=chk.chk" >> $input
+          echo "#$i/$j geom=checkpoint $FREQ" >> $input
+          echo "" >> $input
+          echo "$i $j" >> $input
+          echo "" >> $input
+          echo "0 1" >> $input
+          echo "" >> $input
+          echo "g16 $input" >> /home/dion/QCDB/waitlist.txt
+	else
+          echo "g16 $(pwd)/$input" > /home/dion/QCDB/current.txt
+          time g16 $input 
+        fi
       fi
-      if [ $(tail -n 1 opt.log | grep -c "Normal termination") -gt 0  ] && [  $(tail -n 1  "freq.log"  | grep -c "Normal termination") -gt "0" ] ; then
+
+      test1="$(tail -n 1 opt.log | grep -c 'Normal termination')" 
+      test2="$(tail -n 1 freq.log | grep -c 'Normal termination')"
+      if [ ${test1} -gt 0  ] && [ ${test2} -lt "1" ] ; then
           cp chk.chk ../../chk.chk
           formchk chk.chk
 	  input="freq.gjf"
