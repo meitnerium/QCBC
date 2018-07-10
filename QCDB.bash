@@ -37,7 +37,7 @@ while [ $(head -n 1 /home/dion/QCDB/lists.txt) != "" ] ; do
 	n=$(head -n 1 /home/dion/QCDB/lists.txt)
 	mkdir -p $n
 	cd $n
-	python /home/dion/QCDB/bin/get_XYZ 1 > XYZ.txt
+	python /home/dion/QCDB/bin/get_XYZ $n > XYZ.txt
 
         if [ $? == 0 ] ; then
                 mkdir -p GAUSSIAN

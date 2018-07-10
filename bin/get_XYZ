@@ -9,12 +9,18 @@ import sys
 
 n=sys.argv[1]
 
-compound = pcp.Compound.from_cid(n)
-XYZ = cirpy.resolve(compound.synonyms[0], 'xyz')
-if XYZ is None:
-    sys.exit(1)
-else:
-    print(XYZ.split("\n",2)[2])
+#compound = pcp.Compound.from_cid(n)
+#XYZ = cirpy.resolve(compound.synonyms[0], 'xyz')
+#if XYZ is None:
+#    sys.exit(1)
+#else:
+#    print(XYZ.split("\n",2)[2])
     #aXYZ=XYZ.split("\n",2)[2]
     #XYZ=XYZ.split("\n",2)[2]
+
+
+c = pcp.Compound.from_cid(n, record_type='3d')
+val=c.to_dict(properties=['atoms'])['atoms']
+for atom in val:
+  print(atom['element']+" "+str(atom['x'])+" "+str(atom['y'])+" "+str(atom['z']))
 
