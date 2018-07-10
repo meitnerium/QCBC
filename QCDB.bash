@@ -10,10 +10,27 @@
 # send mail to this address
 #SBATCH --mail-user=meitnerium109@gmail.com
 
-echo "sbatch QCBC.bash"
-export OMP_NUM_THREADS=32
 
-export MKL_NUM_THREADS=32
+NPROC=32
+MEM=100GB
+while [ $1 ] ; do
+  if [ $1 == "-nproc" ] ; then
+        NPROC=$2
+        shift
+        shift
+  elif [ $1 == "-mem" ] ; then
+          MEM=$2
+        shift
+        shift
+  fi
+done
+
+
+
+echo "sbatch QCBC.bash"
+export OMP_NUM_THREADS=$NPROC
+
+export MKL_NUM_THREADS=$NPROC
 
 source $HOME/jupyter_py2/bin/activate
 module load openmpi/2.1.1
@@ -42,7 +59,7 @@ while [ $(head -n 1 /home/dion/QCDB/lists.txt) != "" ] ; do
         if [ $? == 0 ] ; then
                 mkdir -p GAUSSIAN
                 cd GAUSSIAN
-                bash /home/dion/QCDB/bin/launch_gaussian
+                bash /home/dion/QCDB/bin/launch_gaussian -nproc $NPROC -mem $MEM
                 cd ..
         fi
 	cd ..

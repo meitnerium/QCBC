@@ -22,5 +22,5 @@ n=sys.argv[1]
 c = pcp.Compound.from_cid(n, record_type='3d')
 val=c.to_dict(properties=['atoms'])['atoms']
 for atom in val:
-  print(atom['element']+" "+str(atom['x'])+" "+str(atom['y'])+" "+str(atom['z']))
+  print("{0}, {1}, {2}, {3}".format(atom['element'], float(atom['x']), float(atom['y']), float(atom['z'])))
 
