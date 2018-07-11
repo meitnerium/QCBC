@@ -63,7 +63,7 @@ while [ $(head -n 1 /home/dion/QCDB/lists.txt) != "" ] ; do
                 cd ..
         fi
 	cd ..
-	tail -n $(echo "$(cat /home/dion/QCDB/lists.txt |wc -l)-1" | bc -l) /home/dion/QCDB/lists.txt > /home/dion/QCDB/lists.txt.tmp
+	tail -n $(echo "$(cat /home/dion/QCDB/lists.txt | wc -l)-1" | bc -l) /home/dion/QCDB/lists.txt > /home/dion/QCDB/lists.txt.tmp
 	mv /home/dion/QCDB/lists.txt.tmp /home/dion/QCDB/lists.txt
 done
 }

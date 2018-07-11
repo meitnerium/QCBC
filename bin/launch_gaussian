@@ -58,7 +58,7 @@ for i in $METHOD ; do
           cat ../../../XYZ.txt >> $input
           echo "" >> $input
         fi
-	if [ "$j" == "6-311++G(3df,3pd)" ] || [ "$j" == "aug-cc-pvtz" ] || [ "$j" == "aug-cc-pvqz" ] ; then
+	if [ "$j" == "6-311++G(3df,3pd)" ]  || [ "$j" == "aug-cc-pvdz" ] || [ "$j" == "aug-cc-pvtz" ] || [ "$j" == "aug-cc-pvqz" ] ; then
 	  echo "cd $(pwd)" >> /home/dion/QCDB/waitlist.txt
 	  echo "g16 $input" >> /home/dion/QCDB/waitlist.txt
           input="freq.gjf"

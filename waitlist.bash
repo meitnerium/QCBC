@@ -3,10 +3,9 @@
 #SBATCH -c 32
 #SBATCH --mem=0
 #SBATCH --account=def-fdion
-#SBATCH -J QCDB
+#SBATCH -J QCDB_waitlist
 # mail alert at start, end and abortion of execution
 #SBATCH --mail-type=ALL
-
 # send mail to this address
 #SBATCH --mail-user=meitnerium109@gmail.com
 
@@ -43,12 +42,13 @@ source $HOME/jupyter_py2/bin/activate
 
 module load gaussian/g16.b01
 
-$(head -n 1 /home/dion/QCDB/waitlist.txt)
-sed -i "s/MEM2CHANGE/$MEM/" *.gjf
-sed -i "s/NPROC2CHANGE/$NPROC/" *.gjf
-$(head -n 2 /home/dion/QCDB/waitlist.txt | tail -n 1)
-$(head -n 3 /home/dion/QCDB/waitlist.txt | tail -n 1)
-NL=$(cat /home/dion/QCDB/waitlist.txt | wc -l) 
-
-tail -n $(echo "$NL-3" | bc -l) /home/dion/QCDB/waitlist.txt > /home/dion/QCDB/waitlist.txt.tmp
-mv /home/dion/QCDB/waitlist.txt.tmp /home/dion/QCDB/waitlist.txt
+while [ $(cat /home/dion/QCDB/waitlist.txt | wc -l) != "0" ] ; do
+  $(head -n 1 /home/dion/QCDB/waitlist.txt)
+  sed -i "s/MEM2CHANGE/$MEM/" *.gjf
+  sed -i "s/NPROC2CHANGE/$NPROC/" *.gjf
+  $(head -n 2 /home/dion/QCDB/waitlist.txt | tail -n 1)
+  $(head -n 3 /home/dion/QCDB/waitlist.txt | tail -n 1)
+  NL=$(cat /home/dion/QCDB/waitlist.txt | wc -l) 
+  tail -n $(echo "$NL-3" | bc -l) /home/dion/QCDB/waitlist.txt > /home/dion/QCDB/waitlist.txt.tmp
+  mv /home/dion/QCDB/waitlist.txt.tmp /home/dion/QCDB/waitlist.txt
+done

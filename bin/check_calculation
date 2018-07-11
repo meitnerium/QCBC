@@ -1,0 +1,13 @@
+#! /cvmfs/soft.computecanada.ca/nix/var/nix/profiles/16.09/bin/bash
+
+for i in /home/dion/QCDB/*/GAUSSIAN/*/*/opt.gjf ; do 
+  if [ ! -f $(echo $i | sed 's/gjf/log/') ] ; then 
+    if [ $(cat $HOME/QCDB/waitlist.txt |   grep -c $(dirname $i)) == "0" ] ; then
+      echo "calulation must be runned" 
+      #echo "cd $(dirname $i)" >> $HOME/QCDB/waitlist.txt
+      #echo "g16 opt.gjf" >> $HOME/QCDB/waitlist.txt
+      #echo "g16 freq.gjf" >> $HOME/QCDB/waitlist.txt
+    fi 
+  fi
+done
+
