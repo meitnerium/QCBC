@@ -4,10 +4,21 @@ for i in /home/dion/QCDB/*/GAUSSIAN/*/*/opt.gjf ; do
   if [ ! -f $(echo $i | sed 's/gjf/log/') ] ; then 
     if [ $(cat $HOME/QCDB/waitlist.txt |   grep -c $(dirname $i)) == "0" ] ; then
       echo "calulation must be runned" 
-      #echo "cd $(dirname $i)" >> $HOME/QCDB/waitlist.txt
-      #echo "g16 opt.gjf" >> $HOME/QCDB/waitlist.txt
-      #echo "g16 freq.gjf" >> $HOME/QCDB/waitlist.txt
+      echo "cd $(dirname $i)" >> $HOME/QCDB/waitlist.txt
+      echo "g16 opt.gjf" >> $HOME/QCDB/waitlist.txt
+      echo "g16 freq.gjf" >> $HOME/QCDB/waitlist.txt
     fi 
+  else
+    if [ $(tail -n 1 $(echo $i | sed 's/gjf/log/') | grep -c "Normal termination") == "0" ] ; then
+      echo "Error termination of $(echo $i | sed 's/gjf/log/')"
+    fi
   fi
 done
 
+i=1
+while [ $i -lt $(cat $HOME/QCDB/waitlist.txt | wc -l) ] ; do 
+	if [ $(cat $HOME/QCDB/waitlist.txt | $(head -n $i | tail -n 1) | wc -l) -gt 1 ] ; then
+	  echo "$(cat $HOME/QCDB/waitlist.txt | wc -l) appear more then once in $HOME/QCDB/waitlist.txt"
+	fi
+	let i=$i+3
+done

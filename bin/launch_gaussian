@@ -78,21 +78,24 @@ for i in $METHOD ; do
         fi
       fi
 
+
+      input="freq.gjf"
+      echo "%nprocshared=$NPROC" > $input
+      echo "%mem=$MEM" >> $input
+      echo "%chk=chk.chk" >> $input
+      echo "#$i/$j geom=checkpoint $FREQ" >> $input
+      echo "" >> $input
+      echo "$i $j" >> $input
+      echo "" >> $input
+      echo "0 1" >> $input
+      echo "" >> $input
+
+
       test1="$(tail -n 1 opt.log | grep -c 'Normal termination')" 
       test2="$(tail -n 1 freq.log | grep -c 'Normal termination')"
       if [ ${test1} -gt 0  ] && [ ${test2} -lt "1" ] ; then
           cp chk.chk ../../chk.chk
           formchk chk.chk
-	  input="freq.gjf"
-	  echo "%nprocshared=$NPROC" > $input
-	  echo "%mem=$MEM" >> $input
-	  echo "%chk=chk.chk" >> $input
-          echo "#$i/$j geom=checkpoint $FREQ" >> $input
-          echo "" >> $input
-          echo "$i $j" >> $input
-          echo "" >> $input
-          echo "0 1" >> $input
-          echo "" >> $input
 	  echo "g16 $(pwd)/$input" > /home/dion/QCDB/current.txt
 	  time g16 $input
       fi
