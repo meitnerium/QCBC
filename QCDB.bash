@@ -3,7 +3,7 @@
 #SBATCH -c 32
 #SBATCH --mem=0
 #SBATCH --account=def-fdion
-#SBATCH -J QCDB
+#SBATCH -J QCDB_main
 # mail alert at start, end and abortion of execution
 #SBATCH --mail-type=ALL
 
