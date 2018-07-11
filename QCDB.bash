@@ -1,5 +1,5 @@
 #! /bin/bash
-#SBATCH -t 0-08:00
+#SBATCH -t 3-00:00
 #SBATCH -c 32
 #SBATCH --mem=0
 #SBATCH --account=def-fdion
@@ -63,9 +63,9 @@ while [ $(head -n 1 /home/dion/QCDB/lists.txt) != "" ] ; do
                 cd ..
         fi
 	cd ..
+	tail -n $(echo "$(cat /home/dion/QCDB/lists.txt |wc -l)-1" | bc -l) /home/dion/QCDB/lists.txt > /home/dion/QCDB/lists.txt.tmp
+	mv /home/dion/QCDB/lists.txt.tmp /home/dion/QCDB/lists.txt
 done
-tail -n $(echo "$(cat /home/dion/QCDB/lists.txt |wc -l)-1" | bc -l) /home/dion/QCDB/lists.txt > /home/dion/QCDB/lists.txt.tmp
-mv /home/dion/QCDB/lists.txt.tmp /home/dion/QCDB/lists.txt
 }
 
 while [ "$n" -lt "$MAX" ] ; do
