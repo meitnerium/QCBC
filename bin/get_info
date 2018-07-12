@@ -1,0 +1,15 @@
+"""
+Quantum Chemistry DataBase (QCDB) is a python program and database service of quantum chemistry calculation
+"""
+#import pickle
+import os
+import cirpy
+import pubchempy as pcp
+import sys
+
+n=sys.argv[1]
+
+compound = pcp.Compound.from_cid(n)
+print("synonym ="+str(compound.synonyms))
+print(compound.to_dict())
+

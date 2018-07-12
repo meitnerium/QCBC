@@ -1,0 +1,21 @@
+#! /home/dion/jupyter_py2/bin/python
+
+import sys
+import re
+totaltime=0
+for output in sys.argv[1:]:
+    f=open(output)
+    lines=f.readlines()
+    if ("Normal termination" in lines[-1]):
+        m = re.search('([\ 0-9\.]*) days ([\ 0-9\.]*) hours ([\ 0-9\.]*) minutes ([\ 0-9\.]*) seconds.', lines[-4])
+        #print(lines[-4])
+        totaltime=totaltime+int(m.group(1))*60*60*24+int(m.group(2))*60*60+int(m.group(3))*60+float(m.group(4))
+
+print("totaltime="+str(int(totaltime/60/60/24))+" days ")
+totaltime=totaltime-int(totaltime/60/60/24)*60*60*24
+print(str(int(totaltime/60/60))+" hours")
+totaltime=totaltime-(int(totaltime/60/60)*60*60)
+print(str(int(totaltime/60))+" minutes")
+totaltime=totaltime-int(totaltime/60)*60
+print(str(totaltime)+" seconds.")
+

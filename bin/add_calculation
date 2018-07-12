@@ -1,0 +1,20 @@
+from sqlite3 import connect, register_adapter, register_converter, PARSE_DECLTYPES, Binary
+import sys
+
+output=sys.argv[1]
+
+
+dbfile="/home/dion/QCBC/QCBC.db"
+
+conn = connect(dbfile, detect_types=PARSE_DECLTYPES)
+cur = conn.cursor()
+cur.execute("CREATE TABLE IF NOT EXISTS compound (cid INTEGER PRIMARY KEY)")
+cur.execute("CREATE TABLE IF NOT EXISTS calculation (id INTEGER PRIMARY KEY)")
+conn.commit()
+
+
+print("calculation="+output)
+
+conn.close()
+
+

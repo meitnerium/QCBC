@@ -43,7 +43,7 @@ for i in $METHOD ; do
         echo "%chk=chk.chk" >> $input
         if [ -e ../../chk.chk ] ; then
 	  echo "%oldchk=../../chk.chk" >> $input
-          echo "#$i/$j opt=(VeryTight) geom=checkpoint" >> $input
+          echo "#$i/$j opt=(VeryTight,maxcycle=500) geom=checkpoint" >> $input
           echo "" >> $input
           echo "$i $j" >> $input
           echo "" >> $input
