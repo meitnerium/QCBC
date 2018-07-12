@@ -11,8 +11,7 @@
 #SBATCH --mail-user=meitnerium109@gmail.com
 
 
-NPROC=32
-MEM=100GB
+source QCDB.config
 while [ $1 ] ; do
   if [ $1 == "-nproc" ] ; then
         NPROC=$2
@@ -41,8 +40,12 @@ source $HOME/jupyter_py2/bin/activate
 
 
 
+if [ $LOGICIEL == "GAUSSIAN" ]; then
+  module load gaussian/g16.b01
+else if [ $LOGICIEL == "GAMESS" ] ; then
+  module load module load gamess-us/20170420-R1
+fi
 
-module load gaussian/g16.b01
 
 METHOD="HF MP2 MP3 B3LYP WB97XD"
 BASIS="STO-3G 3-21G 6-31G 6-311++G(3df,3pd) aug-cc-pvdz aug-cc-pvtz aug-cc-pvqz"
@@ -56,11 +59,15 @@ while [ $(head -n 1 /home/dion/QCDB/lists.txt) != "" ] ; do
 	cd $n
 	python /home/dion/QCDB/bin/get_XYZ $n > XYZ.txt
 
-        if [ $? == 0 ] ; then
+        if [ $? == 0 ] && [ $LOGICIEL == "GAUSSIAN" ] ; then
                 mkdir -p GAUSSIAN
                 cd GAUSSIAN
                 bash /home/dion/QCDB/bin/launch_gaussian -nproc $NPROC -mem $MEM
                 cd ..
+	elif [ $? == 0 ] && [ $LOGICIEL == "GAMESS" ] ; then
+		mkdir -p GAMESS
+		cd GAMESS
+		bash /home/dion/QCDB/bin/launch_gamess -nproc $NPROC -mem $MEM
         fi
 	cd ..
 	tail -n $(echo "$(cat /home/dion/QCDB/lists.txt | wc -l)-1" | bc -l) /home/dion/QCDB/lists.txt > /home/dion/QCDB/lists.txt.tmp
@@ -68,17 +75,17 @@ while [ $(head -n 1 /home/dion/QCDB/lists.txt) != "" ] ; do
 done
 }
 
-while [ "$n" -lt "$MAX" ] ; do
-	looklist
-	mkdir -p $n
-	cd $n 
-	python /home/dion/QCDB/bin/get_XYZ $n > XYZ.txt
-	if [ $? == 0 ] ; then
-		mkdir -p GAUSSIAN
-		cd GAUSSIAN
-		bash /home/dion/QCDB/bin/launch_gaussian
-		cd ..
-	fi
-	cd ..
-	let n=$n+1
-done
+#while [ "$n" -lt "$MAX" ] ; do
+#	looklist
+#	mkdir -p $n
+#	cd $n 
+#	python /home/dion/QCDB/bin/get_XYZ $n > XYZ.txt
+#	if [ $? == 0 ] ; then
+#		mkdir -p GAUSSIAN
+#		cd GAUSSIAN
+#		bash /home/dion/QCDB/bin/launch_gaussian
+#		cd ..
+#	fi
+#	cd ..
+#	let n=$n+1
+#done

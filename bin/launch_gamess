@@ -1,0 +1,49 @@
+#! /cvmfs/soft.computecanada.ca/nix/var/nix/profiles/16.09/bin/bash
+NPROC=32
+MEM=100GB
+while [ $1 ] ; do  
+  if [ $1 == "-nproc" ] ; then
+	NPROC=$2
+	shift
+	shift
+  elif [ $1 == "-mem" ] ; then
+	  MEM=$2
+	shift 
+	shift
+  fi
+done
+
+METHOD="HF MP2 MP3 B3LYP WB97XD"
+BASIS="STO-3G 3-21G 6-31G 6-311++G(3df,3pd) aug-cc-pvdz aug-cc-pvtz aug-cc-pvqz"
+
+for i in $METHOD ; do
+   mkdir -p $i
+   cd $i
+   if [ $i == "MP3" ] ; then
+           FREQ="freq"
+   else
+           FREQ="freq=(raman)"
+   fi
+   nbas=1
+   for j in $BASIS ; do
+      REPBASIS=$(echo $j | sed 's/+/plus/g' | sed 's/*/star/g' | sed 's/(/_/g' | sed 's/)/_/g' | sed 's/,/virg/g')
+      mkdir -p $REPBASIS
+      cd $REPBASIS
+      echo "$i / $j : $(pwd)"
+      input="opt.gmi"
+      if [ $METHOD == "HF" ]; then
+        echo " \$contrl scftyp=rhf runtyp=optimize \$end" > $input
+      fi
+      if [ $BASIS == "STO-3G" ] ; then
+        echo " \$basis GBASIS=STO NGAUSS=3 \$end" >> $input
+      fi
+      echo " \$data" >> $input
+      echo "test" >> $input
+      echo "C1" >> $input
+      echo "" >> $input
+      cat ../../../XYZ.txt >> $input
+      cd ..
+   done
+   cd ..
+done
+
