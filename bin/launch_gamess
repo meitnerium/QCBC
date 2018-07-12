@@ -34,6 +34,7 @@ for i in $METHOD ; do
       if [ $METHOD == "HF" ]; then
         echo " \$contrl scftyp=rhf runtyp=optimize \$end" > $input
       fi
+      echo " \$system  mwords=$MEM \$end" > $input
       if [ $BASIS == "STO-3G" ] ; then
         echo " \$basis GBASIS=STO NGAUSS=3 \$end" >> $input
       fi
@@ -42,6 +43,7 @@ for i in $METHOD ; do
       echo "C1" >> $input
       echo "" >> $input
       cat ../../../XYZ.txt >> $input
+      echo " \$end" >> $input
       cd ..
    done
    cd ..
