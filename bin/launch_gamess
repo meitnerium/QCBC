@@ -30,20 +30,63 @@ for i in $METHOD ; do
       mkdir -p $REPBASIS
       cd $REPBASIS
       echo "$i / $j : $(pwd)"
-      input="opt.gmi"
-      if [ $METHOD == "HF" ]; then
-        echo " \$contrl scftyp=rhf runtyp=optimize \$end" > $input
-      fi
-      echo " \$system  mwords=$MEM \$end" > $input
-      if [ $BASIS == "STO-3G" ] ; then
+      input="opt.inp"
+      if [ $i == "HF" ]; then
+        if [ $j ==  "aug-cc-pvdz" ] || [ $j ==  "aug-cc-pvtz" ] || [ $j ==  "aug-cc-pvqz" ] ; then
+          echo " \$contrl scftyp=rhf runtyp=optimize ISPHER=1 \$end" > $input
+        else
+          echo " \$contrl scftyp=rhf runtyp=optimize \$end" > $input
+        fi
+      elif [ $i == "MP2" ]; then
+        if [ $j ==  "aug-cc-pvdz" ] || [ $j ==  "aug-cc-pvtz" ] || [ $j ==  "aug-cc-pvqz" ] ; then
+	 echo " \$contrl scftyp=rhf MPLEVL=2 runtyp=optimize ISPHER=1 \$end" > $input
+        else
+	 echo " \$contrl scftyp=rhf MPLEVL=2 runtyp=optimize \$end" > $input
+        fi
+      elif [ $i == "MP3" ]; then
+        if [ $j ==  "aug-cc-pvdz" ] || [ $j ==  "aug-cc-pvtz" ] || [ $j ==  "aug-cc-pvqz" ] ; then
+	 echo " \$contrl scftyp=rhf MPLEVL=3 runtyp=optimize ISPHER=1 \$end" > $input
+        else
+	 echo " \$contrl scftyp=rhf MPLEVL=3 runtyp=optimize \$end" > $input
+        fi
+      elif [ $i == "B3LYP" ]; then
+        if [ $j ==  "aug-cc-pvdz" ] || [ $j ==  "aug-cc-pvtz" ] || [ $j ==  "aug-cc-pvqz" ] ; then
+	 echo " \$contrl scftyp=rhf runtyp=optimize ISPHER=1 \$end" > $input
+        else
+	 echo " \$contrl scftyp=rhf runtyp=optimize \$end" > $input
+        fi
+	echo " \$dft DFTTYP=B3LYP \$end" >> $input
+      elif [ $i == "WB97XD" ]; then
+        if [ $j ==  "aug-cc-pvdz" ] || [ $j ==  "aug-cc-pvtz" ] || [ $j ==  "aug-cc-pvqz" ] ; then
+	 echo " \$contrl scftyp=rhf runtyp=optimize ISPHER=1 \$end" > $input
+        else
+	 echo " \$contrl scftyp=rhf runtyp=optimize \$end" > $input
+        fi
+	echo " \$dft DFTTYP=wB97X-D \$end" >> $input
+      fi 
+      echo " \$system  mwords=$MEM \$end" >> $input
+      if [ $j == "STO-3G" ] ; then
         echo " \$basis GBASIS=STO NGAUSS=3 \$end" >> $input
+      elif [ $j == "3-21G" ] ; then
+        echo " \$basis GBASIS=N21 NGAUSS=3 \$end" >> $input
+      elif [ $j == "6-31G" ] ; then
+        echo " \$basis GBASIS=N31 NGAUSS=6 \$end" >> $input
+      elif [ $j == "6-311++G(3df,3pd)" ] ; then
+        echo " \$basis GBASIS=N311 NGAUSS=6 NDFUNC=3 NPFUNC=3 DIFFSP=.TRUE. \$end" >> $input
+      elif [ $j == "aug-cc-pvdz" ] ; then
+        echo " \$basis GBASIS=ACCD \$end" >> $input
+      elif [ $j == "aug-cc-pvtz" ] ; then
+        echo " \$basis GBASIS=ACCT \$end" >> $input
+      elif [ $j == "aug-cc-pvqz" ] ; then
+        echo " \$basis GBASIS=ACCQ \$end" >> $input
       fi
       echo " \$data" >> $input
       echo "test" >> $input
       echo "C1" >> $input
-      echo "" >> $input
       cat ../../../XYZ.txt >> $input
       echo " \$end" >> $input
+      rm /scratch/dion/opt.*
+      rungms opt.inp 20170420-R1 $NPROC > opt.log
       cd ..
    done
    cd ..
