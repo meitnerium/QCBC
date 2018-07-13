@@ -1,4 +1,5 @@
 #! /cvmfs/soft.computecanada.ca/nix/var/nix/profiles/16.09/bin/bash
+
 NPROC=32
 MEM=100GB
 while [ $1 ] ; do  
@@ -59,8 +60,8 @@ for i in $METHOD ; do
           echo "" >> $input
         fi
 	if [ "$j" == "6-311++G(3df,3pd)" ]  || [ "$j" == "aug-cc-pvdz" ] || [ "$j" == "aug-cc-pvtz" ] || [ "$j" == "aug-cc-pvqz" ] ; then
-	  echo "cd $(pwd)" >> /home/dion/QCDB/waitlist.txt
-	  echo "g16 $input" >> /home/dion/QCDB/waitlist.txt
+	  echo "cd $(pwd)" >> /scratch/dion/QCDB/waitlist.txt
+	  echo "g16 $input" >> /scratch/dion/QCDB/waitlist.txt
           input="freq.gjf"
           echo "%nprocshared=$NPROC" > $input
           echo "%mem=$MEM" >> $input
@@ -71,9 +72,9 @@ for i in $METHOD ; do
           echo "" >> $input
           echo "0 1" >> $input
           echo "" >> $input
-          echo "g16 $input" >> /home/dion/QCDB/waitlist.txt
+          echo "g16 $input" >> /scratch/dion/QCDB/waitlist.txt
 	else
-          echo "g16 $(pwd)/$input" > /home/dion/QCDB/current.txt
+          echo "g16 $(pwd)/$input" > /scratch/dion/QCDB/current.txt
           time g16 $input 
         fi
       fi

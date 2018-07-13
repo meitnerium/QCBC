@@ -51,29 +51,29 @@ BASIS="STO-3G 3-21G 6-31G 6-311++G(3df,3pd) aug-cc-pvdz aug-cc-pvtz aug-cc-pvqz"
 n=1
 MAX=1000000
 function looklist {
-while [ $(cat /home/dion/QCDB/lists.txt | wc -l) -gt "0" ] ; do
-	n=$(head -n 1 /home/dion/QCDB/lists.txt)
-	echo "after n in /home/dion/QCDB/lists.txtt"
+while [ $(cat ${QCDBREP}/lists.txt | wc -l) -gt "0" ] ; do
+	n=$(head -n 1 ${QCDBREP}/lists.txt)
+	echo "after n in ${QCDBREP}/lists.txtt"
 	mkdir -p $n
 	cd $n
-	python /home/dion/QCDB/bin/get_XYZ $n > XYZ.txt
+	python ${QCDBREP}/bin/get_XYZ $n > XYZ.txt
 
         if [ $? == "0" ] && [ $LOGICIEL == "GAUSSIAN" ] ; then
                 mkdir -p GAUSSIAN
                 cd GAUSSIAN
-                bash /home/dion/QCDB/bin/launch_gaussian -nproc $NPROC -mem $MEM
+                bash ${QCDBREP}/bin/launch_gaussian -nproc $NPROC -mem $MEM
                 cd ..
 	elif [ $LOGICIEL == "GAMESS" ] ; then
 		mkdir -p GAMESS
 		cd GAMESS
 		echo "In GAMESS rep"
 		pwd
-		bash /home/dion/QCDB/bin/launch_gamess -nproc $NPROC -mem $MEM
+		bash ${QCDBREP}/bin/launch_gamess -nproc $NPROC -mem $MEM
 		cd ..
         fi
 	cd ..
-	tail -n $(echo "$(cat /home/dion/QCDB/lists.txt | wc -l)-1" | bc -l) /home/dion/QCDB/lists.txt > /home/dion/QCDB/lists.txt.tmp
-	mv /home/dion/QCDB/lists.txt.tmp /home/dion/QCDB/lists.txt
+	tail -n $(echo "$(cat ${QCDBREP}/lists.txt | wc -l)-1" | bc -l) ${QCDBREP}/lists.txt > ${QCDBREP}/lists.txt.tmp
+	mv ${QCDBREP}/lists.txt.tmp ${QCDBREP}/QCDB/lists.txt
 done
 }
 
@@ -81,18 +81,18 @@ while [ "$n" -lt "$MAX" ] ; do
   looklist
   mkdir -p $n
   cd $n 
-  python /home/dion/QCDB/bin/get_XYZ $n > XYZ.txt
+  python ${QCDBREP}/bin/get_XYZ $n > XYZ.txt
   if [ $? == 0 ] && [ $LOGICIEL == "GAUSSIAN" ] ; then
                 mkdir -p GAUSSIAN
                 cd GAUSSIAN
-                bash /home/dion/QCDB/bin/launch_gaussian -nproc $NPROC -mem $MEM
+                bash ${QCDBREP}/bin/launch_gaussian -nproc $NPROC -mem $MEM
                 cd ..
         elif [ $LOGICIEL == "GAMESS" ] ; then
                 mkdir -p GAMESS
                 cd GAMESS
                 echo "In GAMESS rep"
                 pwd
-                bash /home/dion/QCDB/bin/launch_gamess -nproc $NPROC -mem $MEM
+                bash ${QCDBREP}/QCDB/bin/launch_gamess -nproc $NPROC -mem $MEM
                 cd ..
   fi
   cd ..
