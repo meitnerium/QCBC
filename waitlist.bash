@@ -48,7 +48,7 @@ while [ $(cat /scratch/dion/QCDB/waitlist.txt | wc -l) != "0" ] ; do
   sed -i "s/NPROC2CHANGE/$NPROC/" *.gjf
   $(head -n 2 /scratch/dion/QCDB/waitlist.txt | tail -n 1)
   $(head -n 3 /scratch/dion/QCDB/waitlist.txt | tail -n 1)
-  NL=$(cat /home/scratch/QCDB/waitlist.txt | wc -l)
+  NL=$(cat /scratch/QCDB/waitlist.txt | wc -l)
   tail -n $(echo "$NL-3" | bc -l) /scratch/dion/QCDB/waitlist.txt > /scratch/dion/QCDB/waitlist.txt.tmp
   mv /scratch/dion/QCDB/waitlist.txt.tmp /scratch/dion/QCDB/waitlist.txt
 done

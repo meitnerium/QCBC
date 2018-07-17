@@ -1,6 +1,6 @@
 #! /bin/bash
 #SBATCH -t 3-00:00
-#SBATCH -c 24
+#SBATCH -c 32
 #SBATCH --mem=0
 #SBATCH --account=def-fdion
 #SBATCH -J QCDB_main
