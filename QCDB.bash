@@ -74,7 +74,7 @@ while [ $(cat ${QCDBREP}/lists.txt | wc -l) -gt "0" ] ; do
         fi
 	cd ..
 	tail -n $(echo "$(cat ${QCDBREP}/lists.txt | wc -l)-1" | bc -l) ${QCDBREP}/lists.txt > ${QCDBREP}/lists.txt.tmp
-	mv ${QCDBREP}/lists.txt.tmp ${QCDBREP}/QCDB/lists.txt
+	mv ${QCDBREP}/lists.txt.tmp ${QCDBREP}/lists.txt
 done
 }
 
