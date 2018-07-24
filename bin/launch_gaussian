@@ -39,6 +39,7 @@ METHOD="HF MP2 MP3 B3LYP WB97XD"
 BASIS="STO-3G 3-21G 6-31G 6-311++G(3df,3pd) aug-cc-pvdz aug-cc-pvtz aug-cc-pvqz"
 
 for i in $METHOD ; do
+   echo "METHOD = $METHOD"
    mkdir -p $i
    cd $i
    if [ $i == "MP3" ] ; then
@@ -55,13 +56,8 @@ for i in $METHOD ; do
       test="$(tail -n 1 opt.log | grep -c 'Normal termination')"
       if [ "${test}" == "0"  ]; then
         input="opt.gjf"
-	if [ "$j" == "6-311++G(3df,3pd)" ] || [ "$j" == "aug-cc-pvtz" ] || [ "$j" == "aug-cc-pvqz" ] ; then
-	  echo  "%nprocshared=NPROC2CHANGE"  > $input
-          echo "%mem=MEM2CHANGE" >> $input
-	else
-	  echo "%nprocshared=$NPROC" > $input
-          echo "%mem=$MEM" >> $input
-	fi
+	echo "%nprocshared=$NPROC" > $input
+        echo "%mem=$MEM" >> $input
         echo "%chk=chk.chk" >> $input
         if [ -e ../../chk.chk ] ; then
 	  echo "%oldchk=../../chk.chk" >> $input
