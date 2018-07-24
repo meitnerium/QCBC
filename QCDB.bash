@@ -62,6 +62,7 @@ while [ $(cat ${QCDBREP}/lists.txt | wc -l) -gt "0" ] ; do
                 mkdir -p GAUSSIAN
                 cd GAUSSIAN
                 bash ${QCDBREP}/bin/launch_gaussian -nproc $NPROC -mem $MEM
+
                 cd ..
 	elif [ $LOGICIEL == "GAMESS" ] ; then
 		mkdir -p GAMESS

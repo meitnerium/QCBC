@@ -14,6 +14,27 @@ while [ $1 ] ; do
   fi
 done
 
+function createsh () {
+echo "#! /bin/bash
+#SBATCH -t 3-00:00
+#SBATCH -c 32
+#SBATCH --mem=0
+#SBATCH --account=def-fdion
+#SBATCH -J QCDB_onecalc
+# mail alert at start, end and abortion of execution
+#SBATCH --mail-type=ALL
+# send mail to this address
+#SBATCH --mail-user=meitnerium109@gmail.com" > submit.bash
+
+echo "module load gaussian/g16.b01" >> submit.bash
+echo "time g16 opt.gjf" >> submit.bash
+echo "time g16 freq.gjf" >> submit.bash
+
+
+}
+
+
+
 METHOD="HF MP2 MP3 B3LYP WB97XD"
 BASIS="STO-3G 3-21G 6-31G 6-311++G(3df,3pd) aug-cc-pvdz aug-cc-pvtz aug-cc-pvqz"
 
@@ -100,6 +121,7 @@ for i in $METHOD ; do
 	  echo "g16 $(pwd)/$input" > /scratch/dion/QCDB/current.txt
 	  time g16 $input
       fi
+      createsh
       let nbas=$nbas+1
       cd ..
    done
