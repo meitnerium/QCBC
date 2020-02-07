@@ -35,7 +35,7 @@ from cif2cell.elementdata import *
 from six.moves import range
 
 
-rel-pz_PPREP="/home/fradion12/QE/pslibrary/rel-pw91/PSEUDOPOTENTIALS/"
+relpz_PPREP="/home/fradion12/QE/pslibrary/rel-pw91/PSEUDOPOTENTIALS/"
 PP='rel-pz'
 
 ################################################################################################
@@ -100,7 +100,7 @@ class PWSCFFileFD(GeometryOutputFile):
         filestring += "    calculation = 'vc-relax'\n"
         filestring += "    restart_mode = 'from_scratch'\n"
         filestring += "    outdir = './1'\n"
-        filestring += "    pseudo_dir = '/home/francois/QE/pslibrary-master/pbe/PSEUDOPOTENTIALS/'\n"
+        filestring += "    pseudo_dir = '"+relpz_PPREP+"'\n"
         filestring += "    prefix = 'QE'\n"
         filestring += "    etot_conv_thr = 0.0001\n"
         filestring += "    forc_conv_thr = 0.001\n"
@@ -168,7 +168,7 @@ class PWSCFFileFD(GeometryOutputFile):
                     filestring += "   ???".rjust(11)
                 if PP == 'PBE':
                   self.getpseudopbe(sp.rjust(width))
-                else if PP == 'rel-pw91':
+                elif PP == 'rel-pw91':
                    self.getpseudorelpw91(sp.rjust(width))
 
                 filestring += "  %2s%s\n"%(sp.rjust(width),self.pseudostring)
@@ -233,26 +233,26 @@ class PWSCFFileFD(GeometryOutputFile):
         elif atom == "Li" or atom == "Be":
            self.pseudostring = ".rel-pw91-s-kjpaw_psl.1.0.0.UPF"
         #5
-        elif atom == "B" or atom == "C" or atom == "N" or atom == "O" or atom == "F" or atom == "Ne" or atom == "Al" or atom == "Si" or atom == "P" or atom == "S"
-         or atom == "Cl" or atom == "Ar" or atom == "Fe" or atom == "Co" or atom == "Ni" or atom == "Au" or atom == "Cd" or atom == "Ir" or atom == "Pt" or atom == "Au"
+        elif atom == "B" or atom == "C" or atom == "N" or atom == "O" or atom == "F" or atom == "Ne" or atom == "Al" or atom == "Si" or atom == "P" or atom == "S" \
+         or atom == "Cl" or atom == "Ar" or atom == "Fe" or atom == "Co" or atom == "Ni" or atom == "Au" or atom == "Cd" or atom == "Ir" or atom == "Pt" or atom == "Au" \
          or atom == "Hg":
            self.pseudostring = ".rel-pw91-n-kjpaw_psl.1.0.0.UPF"
 
 
         #11
-        elif atom == "Na" or atom == "Mg" or atom == "K" or atom == "Ca" or atom == "Sc" or atom == "Ti" or atom == "V" or atom == "Cr" or atom == "Mn"
-         or  atom == "Rb" or atom == "Sr" or atom == "Y" or atom == "Zr" or atom == "Nb" or atom == "Mo" or atom == "Tc" or atom == "Ru" or atom == "Rh"
-         or  atom == "Cs" or atom == "Ba" or atom == "" or atom == "" or atom == "" or atom == "" or atom == "" or atom == "" or atom == "" or atom == "" or atom == "":
+        elif atom == "Na" or atom == "Mg" or atom == "K" or atom == "Ca" or atom == "Sc" or atom == "Ti" or atom == "V" or atom == "Cr" or atom == "Mn" \
+         or  atom == "Rb" or atom == "Sr" or atom == "Y" or atom == "Zr" or atom == "Nb" or atom == "Mo" or atom == "Tc" or atom == "Ru" or atom == "Rh" \
+         or  atom == "Cs" or atom == "Ba":
            self.pseudostring = ".rel-pw91-spn-kjpaw_psl.1.0.0.UPF"
-        elif atom == "Cu" or atom == "Zn" or atom == "Ga" or atom == "Ge" or atom == "As" or atom == "Se" or atom == "Br" or atom == "Kr" or atom == "Pd":
-         or  atom == "In" or atom == "Sn" or atom == "Sb" or atom == "Te" or atom == "I" or atom == "Xe" or atom == "Tl" or atom == "Pb" or atom == "Bi" 
-         or atom == "Po" or atom == "At" or atom == "Rn" or atom == "" or atom == "" or atom == "" or atom == "":
+        elif atom == "Cu" or atom == "Zn" or atom == "Ga" or atom == "Ge" or atom == "As" or atom == "Se" or atom == "Br" or atom == "Kr" or atom == "Pd" \
+         or  atom == "In" or atom == "Sn" or atom == "Sb" or atom == "Te" or atom == "I" or atom == "Xe" or atom == "Tl" or atom == "Pb" or atom == "Bi" \
+         or atom == "Po" or atom == "At" or atom == "Rn":
            self.pseudostring = ".rel-pw91-dn-kjpaw_psl.1.0.0.UPF"
-        elif  atom == "La" or atom == "Ce" or atom == "Pr" or atom == "Nd" or atom == "Pm" or atom == "Sm" or atom == "Eu" or atom == "Gd" or atom == "Tb" 
-        or atom == "Dy" or atom == "Ho" or atom == "Er" or atom == "Tm" or atom == "Yb" or atom == "Lu" or atom == "Hf" or atom == "Ta" or atom == "W" or atom == "Re" 
+        elif  atom == "La" or atom == "Ce" or atom == "Pr" or atom == "Nd" or atom == "Pm" or atom == "Sm" or atom == "Eu" or atom == "Gd" or atom == "Tb" \
+        or atom == "Dy" or atom == "Ho" or atom == "Er" or atom == "Tm" or atom == "Yb" or atom == "Lu" or atom == "Hf" or atom == "Ta" or atom == "W" or atom == "Re" \
         or atom == "Os" or atom == "Ac" or atom == "Th" or atom == "Pa" or atom == "U" or atom == "Np" or atom == "Pu" or atom == "Am":
            self.pseudostring = ".rel-pw91-spdfn-kjpaw_psl.1.0.0.UPF"
-        elif  atom == "Fr" or atom == "Ra" or atom == "" or atom == "" or atom == "" or atom == "" or atom == "" or atom == "": 
+        elif  atom == "Fr" or atom == "Ra": 
            self.pseudostring = ".rel-pw91-spdn-kjpaw_psl.1.0.0.UPF"
 
         else:
